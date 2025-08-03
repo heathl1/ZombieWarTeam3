@@ -25,11 +25,13 @@ public class UnitFactory {
             return new Tank(randomNumber, randomNumber, randomNumber, false, false, null);
         }
     }
-
+/*
     //Would we need this?
     public Unit createUnit(String type) {
         return new Unit(0, 0, 0, false, false, type);
     }
+
+ */
 
     public Unit createCommonInfected() {
         return new CommonInfected(0, 0, 0, false, false, null);

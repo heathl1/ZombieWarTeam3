@@ -5,14 +5,16 @@ public class Unit {
     private boolean alive;
     private boolean isZombie;
     private String unitType;
+    private int id; // id to better identify which character is performing which action
 
-    public Unit(int health, int maxHealth, int attackPower, boolean alive, boolean isZombie, String unitType) {
+    public Unit(int health, int maxHealth, int attackPower, boolean alive, boolean isZombie, String unitType, int id) {
         this.health = health;
         this.maxHealth = maxHealth;
         this.attackPower = attackPower;
         this.alive = alive;
         this.isZombie = isZombie;
         this.unitType = unitType;
+        this.id = id;
     }
 
     public void attack(Unit target) {
@@ -46,9 +48,10 @@ public class Unit {
         return this.isZombie;
     }
 
+    public int getId() { return this.id; }
+
     public String toString() {
-        //TODO
-        return "TODO";
+        return String.format("%s %d", unitType, getId());
     }
 
 }
