@@ -1,6 +1,7 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
-import java.util.HashMap;
+//import java.util.HashMap;
 
 public class Simulation {
     private ArrayList<Unit> survivors = new ArrayList<Unit>();
@@ -24,9 +25,50 @@ public class Simulation {
         }
     }
 
+    public void generateWeaponsCache() {
+        Random random = new Random();
+
+        //Randomly creating cache
+        ArrayList<Weapon> weaponsCache = new ArrayList<>();
+        for(int i = 0; i < survivors.size(); i++) {
+            int randomCache = random.nextInt(7);
+            switch(randomCache) {
+                case 0:
+                    weaponsCache.add(new Shotgun());
+                    break;
+                case 1:
+                    weaponsCache.add(new SubmachineGun());
+                    break;
+                case 2:
+                    weaponsCache.add(new AssaultRifle());
+                    break;
+                case 3:
+                    weaponsCache.add(new Pistol());
+                    break;
+                case 4:
+                    weaponsCache.add(new Axe());
+                    break;
+                case 5:
+                    weaponsCache.add(new Crowbar());
+                    break;
+                case 6:
+                    weaponsCache.add(new FryingPan());
+                    break;
+            }
+        }
+
+        //Random survivor chooses weapon
+        Collections.shuffle(weaponsCache);
+        for (int i = 0; i < survivors.size(); i++) {
+            int nextWeapon = random.nextInt(weaponsCache.size());
+            survivors.get(i).setWeapon(weaponsCache.remove(nextWeapon));
+        }
+    }
+
     public void RunSimulation() {
         //Main game logic
         generateCharacters(); // fill zombie and survivor lists
+        generateWeaponsCache();//Adding a weapon to everyoe
 
         System.out.printf("We have %d survivors trying to make it to safety. ", survivors.size());
         System.out.printf("(%d scientists, %d civillians, %d soldiers)\n",

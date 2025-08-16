@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class Unit {
     private int health;
     private int maxHealth;
@@ -6,6 +8,7 @@ public class Unit {
     private boolean isZombie;
     private String unitType;
     private int id; // id to better identify which character is performing which action
+    private Weapon weapon;
 
     public Unit(int health, int maxHealth, int attackPower, boolean alive, boolean isZombie, String unitType, int id) {
         this.health = health;
@@ -37,7 +40,18 @@ public class Unit {
     }
 
     public int getAttackPower() {
-        return this.attackPower;
+        if(!this.unitType.equals("Tank")  && !this.unitType.equals("Common Infected")) {
+            if(this.weapon == null) {
+                System.out.println(this.unitType + this.id + "has npo weapo");
+            }
+            Random random = new Random();
+            Integer aim = random.nextInt(99) + 1;
+            if(aim > this.weapon.getAccuracy()) {
+                return 0;
+            }
+            return this.weapon.getDamage();
+        }
+        return attackPower;
     }
 
     public String getUnitType() {
@@ -49,6 +63,10 @@ public class Unit {
     }
 
     public int getId() { return this.id; }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
+    }
 
     public String toString() {
         return String.format("%s %d", unitType, getId());
