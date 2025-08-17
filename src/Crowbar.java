@@ -1,5 +1,5 @@
 public class Crowbar extends Weapon {
     public Crowbar() {
-        super(8, 100);
+        super(8, 100, "Crowbar");
     }
 }
