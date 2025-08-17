@@ -68,7 +68,7 @@ public class Simulation {
     public void RunSimulation() {
         //Main game logic
         generateCharacters(); // fill zombie and survivor lists
-        generateWeaponsCache();//Adding a weapon to everyoe
+        generateWeaponsCache();//Adding a weapon to everyone
 
         System.out.printf("We have %d survivors trying to make it to safety. ", survivors.size());
         System.out.printf("(%d scientists, %d civillians, %d soldiers)\n",
@@ -92,45 +92,51 @@ public class Simulation {
         }
     }
 
-    // battle function
+    // battle function - Fixed to prevent multiple kill messages and show weapons used
     public void battle() {
+        // Create lists to track who killed whom to avoid duplicate messages
+        ArrayList<Unit> deadZombies = new ArrayList<>();
+        ArrayList<Unit> deadSurvivors = new ArrayList<>();
+        
         // first, each survivor will attack each zombie
         for (Unit survivor : survivors) {
             for (Unit zombie : zombies) {
-                survivor.attack(zombie);
-                if (!zombie.isAlive() && (zombie.getHealth() + survivor.getAttackPower()) >= 0){
-                    // if this was the final blow, it will print that the zombie killed the survivor
-                    System.out.printf("%s killed %s\n",
-                            survivor, zombie);
+                if (zombie.isAlive()) { // Only attack if zombie is still alive
+                    int damageDealt = survivor.getAttackPowerWithWeapon();
+                    if (damageDealt > 0) { // Only attack if weapon hit (didn't miss)
+                        zombie.takeDamage(damageDealt);
+                        
+                        // Check if this attack killed the zombie
+                        if (!zombie.isAlive() && !deadZombies.contains(zombie)) {
+                            deadZombies.add(zombie); // Mark as dead to prevent duplicate messages
+                            System.out.printf("%s killed %s with %s\n",
+                                    survivor, zombie, survivor.getWeaponName());
+                        }
+                    }
                 }
             }
-
         }
+        
         // next, each zombie will attack each survivor
         for (Unit zombie : zombies) {
             for (Unit survivor : survivors) {
-                zombie.attack(survivor);
-                if ((!survivor.isAlive() && (survivor.getHealth() + zombie.getAttackPower()) >= 0)){
-                    System.out.printf("%s killed %s\n",
-                            zombie,  survivor );
+                if (survivor.isAlive()) { // Only attack if survivor is still alive
+                    zombie.attack(survivor);
+                    
+                    // Check if this attack killed the survivor
+                    if (!survivor.isAlive() && !deadSurvivors.contains(survivor)) {
+                        deadSurvivors.add(survivor); // Mark as dead to prevent duplicate messages
+                        System.out.printf("%s killed %s\n",
+                                zombie, survivor);
+                    }
                 }
             }
         }
     }
 
     public void removeDeadCharacters() {
-        // iterate through survivors
-        for (int i = 0; i < survivors.size(); i++) {
-            if (!survivors.get(i).isAlive()) { // check if they're alive
-                survivors.remove(survivors.get(i)); // remove survivors with no more health
-            }
-        }
-
-        // iterate through zombies
-        for (int i = 0; i < zombies.size(); i++) {
-            if (!zombies.get(i).isAlive()) { // check if they're alive
-                zombies.remove(zombies.get(i)); // remove zombie with no more health
-            }
-        }
+        // Use removeIf for safer removal during iteration
+        survivors.removeIf(survivor -> !survivor.isAlive());
+        zombies.removeIf(zombie -> !zombie.isAlive());
     }
 }
