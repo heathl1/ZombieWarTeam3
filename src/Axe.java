@@ -1,5 +1,5 @@
 public class Axe extends Weapon {
     public Axe() {
-        super(10, 100);
+        super(10, 100, "Axe");
     }
 }
