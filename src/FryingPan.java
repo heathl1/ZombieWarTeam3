@@ -1,5 +1,5 @@
 public class FryingPan extends Weapon {
     public FryingPan() {
-        super(5, 100);
+        super(5, 100, "Frying Pan");
     }
 }
