@@ -1,3 +1,6 @@
+/*
+CommonInfected.java - defines "regular" zombie Unit type
+ */
 public class CommonInfected extends Unit {
     public static int comInfCount = 0; // counter to correspond with adding ID
     public CommonInfected(int health, int maxHealth, int attackPower, boolean alive, boolean isZombie, String unitType) {

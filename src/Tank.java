@@ -1,3 +1,6 @@
+/*
+Tank.java - defines the Tank/"super zombie" Unit class
+ */
 public class Tank extends Unit{
     public static int tankCount = 0;
     public Tank(int health, int maxHealth, int attackPower, boolean alive, boolean isZombie, String unitType) {

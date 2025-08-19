@@ -1,3 +1,6 @@
+/*
+Scientist.java - defines Scientist Unit type
+ */
 public class Scientist extends Unit{
     public static int scientistCount = 0; // counter to correspond with adding ID
     public Scientist(int health, int maxHealth, int attackPower, boolean alive, boolean isZombie, String unitType) {

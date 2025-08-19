@@ -1,11 +1,13 @@
+/*
+Simulation.java - Implements the main game logic
+ */
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-//import java.util.HashMap;
 
 public class Simulation {
-    private ArrayList<Unit> survivors = new ArrayList<Unit>();
-    private ArrayList<Unit> zombies = new ArrayList<Unit>();
+    private ArrayList<Unit> survivors = new ArrayList<Unit>(); // keep track of survivors
+    private ArrayList<Unit> zombies = new ArrayList<Unit>(); // keep track of Zombies
     private UnitFactory unitFactory = new UnitFactory();//Not in planning docs
 
     public Simulation() { }
@@ -25,33 +27,35 @@ public class Simulation {
         }
     }
 
+    // Generate the weapons the survivors can pick up
     public void generateWeaponsCache() {
         Random random = new Random();
 
         //Randomly creating cache
         ArrayList<Weapon> weaponsCache = new ArrayList<>();
         for(int i = 0; i < survivors.size(); i++) {
+            // random number generated 0 - 6, corresponding weapon case is added to the cache
             int randomCache = random.nextInt(7);
             switch(randomCache) {
-                case 0:
+                case 0: // adds shotgun
                     weaponsCache.add(new Shotgun());
                     break;
-                case 1:
+                case 1: // adds SubmachineGun
                     weaponsCache.add(new SubmachineGun());
                     break;
-                case 2:
+                case 2: // Adds assault rifle
                     weaponsCache.add(new AssaultRifle());
                     break;
-                case 3:
+                case 3: // adds pistol
                     weaponsCache.add(new Pistol());
                     break;
-                case 4:
+                case 4: // adds Axe
                     weaponsCache.add(new Axe());
                     break;
-                case 5:
+                case 5: // adds crowbar
                     weaponsCache.add(new Crowbar());
                     break;
-                case 6:
+                case 6: // adds frying pan
                     weaponsCache.add(new FryingPan());
                     break;
             }
@@ -66,15 +70,13 @@ public class Simulation {
     }
 
     public void RunSimulation() {
+
+        System.out.println("ZOMBIE WAR");
         //Main game logic
         generateCharacters(); // fill zombie and survivor lists
         generateWeaponsCache();//Adding a weapon to everyone
 
-        System.out.printf("We have %d survivors trying to make it to safety. ", survivors.size());
-        System.out.printf("(%d scientists, %d civillians, %d soldiers)\n",
-                Scientist.scientistCount, Civilian.civCount, Soldier.soldierCount);
-        System.out.printf("But we have %d zombies waiting for them. ", zombies.size());
-        System.out.printf("(%d common infected, %d tanks)\n", CommonInfected.comInfCount, Tank.tankCount);
+        printOpeningStatements();
         // continue running battles until zombies or survivors are empty
         while ((!zombies.isEmpty()) && (!survivors.isEmpty())) {
             battle();
@@ -97,8 +99,10 @@ public class Simulation {
         // Create lists to track who killed whom to avoid duplicate messages
         ArrayList<Unit> deadZombies = new ArrayList<>();
         ArrayList<Unit> deadSurvivors = new ArrayList<>();
+        int round = 1;
         
         // first, each survivor will attack each zombie
+        System.out.println("ROUND " + round++);
         for (Unit survivor : survivors) {
             for (Unit zombie : zombies) {
                 if (zombie.isAlive()) { // Only attack if zombie is still alive
@@ -118,6 +122,7 @@ public class Simulation {
         }
         
         // next, each zombie will attack each survivor
+
         for (Unit zombie : zombies) {
             for (Unit survivor : survivors) {
                 if (survivor.isAlive()) { // Only attack if survivor is still alive
@@ -126,12 +131,25 @@ public class Simulation {
                     // Check if this attack killed the survivor
                     if (!survivor.isAlive() && !deadSurvivors.contains(survivor)) {
                         deadSurvivors.add(survivor); // Mark as dead to prevent duplicate messages
-                        System.out.printf("%s killed %s\n",
+                        System.out.printf("%s killed %s with its bare hands\n",
                                 zombie, survivor);
                     }
                 }
             }
         }
+        System.out.println("------------------------------------------------------------------");
+
+    }
+    public void printOpeningStatements() {
+        // opening print statements
+        System.out.println("------------------------------------------------------------------");
+        System.out.printf("We have %d survivors trying to make it to safety. \n", survivors.size());
+        System.out.printf("(%d scientists, %d civillians, %d soldiers)\n",
+                Scientist.scientistCount, Civilian.civCount, Soldier.soldierCount);
+        System.out.printf("But we have %d zombies waiting for them. \n", zombies.size());
+        System.out.printf("(%d common infected, %d tanks)\n", CommonInfected.comInfCount, Tank.tankCount);
+        System.out.println("How many survivors will make it to safety...");
+        System.out.println("------------------------------------------------------------------");
     }
 
     public void removeDeadCharacters() {
