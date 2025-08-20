@@ -9,7 +9,7 @@ public class Simulation {
     private ArrayList<Unit> survivors = new ArrayList<Unit>(); // keep track of survivors
     private ArrayList<Unit> zombies = new ArrayList<Unit>(); // keep track of Zombies
     private UnitFactory unitFactory = new UnitFactory();//Not in planning docs
-    private int round = 0;
+    private int round = 1;
 
     public Simulation() { }
 
