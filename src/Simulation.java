@@ -9,6 +9,7 @@ public class Simulation {
     private ArrayList<Unit> survivors = new ArrayList<Unit>(); // keep track of survivors
     private ArrayList<Unit> zombies = new ArrayList<Unit>(); // keep track of Zombies
     private UnitFactory unitFactory = new UnitFactory();//Not in planning docs
+    private int round = 0;
 
     public Simulation() { }
 
@@ -79,6 +80,7 @@ public class Simulation {
         printOpeningStatements();
         // continue running battles until zombies or survivors are empty
         while ((!zombies.isEmpty()) && (!survivors.isEmpty())) {
+            System.out.println("ROUND " + round++);
             battle();
             removeDeadCharacters();
         }
@@ -99,10 +101,8 @@ public class Simulation {
         // Create lists to track who killed whom to avoid duplicate messages
         ArrayList<Unit> deadZombies = new ArrayList<>();
         ArrayList<Unit> deadSurvivors = new ArrayList<>();
-        int round = 1;
-        
+                
         // first, each survivor will attack each zombie
-        System.out.println("ROUND " + round++);
         for (Unit survivor : survivors) {
             for (Unit zombie : zombies) {
                 if (zombie.isAlive()) { // Only attack if zombie is still alive
